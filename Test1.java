@@ -94,6 +94,7 @@ public class Test1 {
         while (numClusters > 0) {
             double rand_num = Math.random() * liz.size();
             int rand_index = (int) rand_num;
+            // Case handling for same elements
             if (chosenPoints.indexOf(rand_index) >= 0) {
                 boolean notSame = false;
                 while (notSame == false) {
@@ -124,17 +125,24 @@ public class Test1 {
             System.out.print(pointArray.get(i) + "\n");
             writeOutput.print(pointArray.get(i) + "\n");
         }
+        // Track changes in chosen coordinates
+        int changes;
+        double[] singleCoord;
+        double sumOfSquares, xAvg, yAvg;
         while (endLoop == false) {
-            squares = new ArrayList<Double>();
-            int changes = 0;
+            squares.clear();
+            changes = 0;
             for (int i = 0; i < liz.size(); i++) {
-                double[] singleCoord = {xCoords.get(i), yCoords.get(i)};
+                // double[] singleCoord = {xCoords.get(i), yCoords.get(i)};
+                singleCoord = new double[2];
+                singleCoord[0] = xCoords.get(i);
+                singleCoord[1] = yCoords.get(i);
                 closest_stationary_point(singleCoord, pointArray, squares, xSums, ySums, pointCount, closestClusters);
                 if (numIterations >= 2 && tempArray.get(i) != closestClusters.get(i)) {
                     changes += 1;
                 }
             }
-            double sumOfSquares = 0.0;
+            sumOfSquares = 0.0;
             for (int i = 0; i < squares.size(); i++) {
                 sumOfSquares += squares.get(i);
             }
@@ -144,8 +152,8 @@ public class Test1 {
             writeOutput.printf("\nPoints: \n");
             for (int i = 0; i < pointArray.size(); i++) {
                 ArrayList<Double> newPoint = new ArrayList<Double>();
-                double xAvg = xSums.get(i) / pointCount.get(i);
-                double yAvg = ySums.get(i) / pointCount.get(i);
+                xAvg = xSums.get(i) / pointCount.get(i);
+                yAvg = ySums.get(i) / pointCount.get(i);
                 newPoint.add(xAvg);
                 newPoint.add(yAvg);
                 pointArray.set(i, newPoint);
@@ -158,10 +166,11 @@ public class Test1 {
                 endLoop = true;
             }
             numIterations += 1;
-            for (int i = 0; i < closestClusters.size(); i++) {
-                tempArray.set(i, closestClusters.get(i));
-            }
-            System.out.print(closestClusters);
+            //for (int i = 0; i < closestClusters.size(); i++) {
+            //    tempArray.add(closestClusters.get(i));
+            //}
+            tempArray = closestClusters;
+            System.out.println("Closest Clusters: " + closestClusters);
             closestClusters.clear();
         }
         System.out.printf("\nDone!\n");
